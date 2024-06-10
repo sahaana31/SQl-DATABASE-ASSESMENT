@@ -4,15 +4,20 @@ import sqlite3
 #contants and variables
 DATABASE = "Members.db"
 
+
+
 #functions
-def print_all_age():
+def print_all_members():
+    '''print all members nicely'''
     db = sqlite3.connect(DATABASE)
     cursor = db.cursor()
-    sql = "SELECT Name,Last_name,Age from members WHERE Age > 30;" 
+    sql = "SELECT Name,Last_name,Age from members;" 
     cursor.execute(sql)
     results = cursor.fetchall()
-    print(results)
-    db.close
+    print(f"Name  Last_name Age  Gender")
+    for members in results:
+        print(f"Name: {members[0]:<12} Last_name: {members[1]:<12} Age: {members[2]:<12}")
+    db.close()
 
 def print_all_male():
     db = sqlite3.connect(DATABASE)
@@ -21,7 +26,7 @@ def print_all_male():
     cursor.execute(sql)
     results = cursor.fetchall()
     print(results)
-    db.close
+    db.close()
 
 def print_all_blogging():
     db = sqlite3.connect(DATABASE)
@@ -30,16 +35,20 @@ def print_all_blogging():
     cursor.execute(sql)
     results = cursor.fetchall()
     print(results)
-    db.close
+    db.close()
 
 def print_all_age_between():
     db = sqlite3.connect(DATABASE)
+    #ask user upper age
+    #ask user lower_age
+    lower_age = int(input("What is the lowest age?: "))
+    upper_age = int(input("What is the highestage?: "))
     cursor = db.cursor()
-    sql = "SELECT * FROM members WHERE Age BETWEEN 25 AND 35;" 
-    cursor.execute(sql)
+    sql = "SELECT * FROM members WHERE Age BETWEEN ? AND ?;" 
+    cursor.execute(sql,(lower_age,upper_age))
     results = cursor.fetchall()
     print(results)
-    db.close
+    db.close()
 
 def print_all_birthday():
     db = sqlite3.connect(DATABASE)
@@ -48,7 +57,7 @@ def print_all_birthday():
     cursor.execute(sql)
     results = cursor.fetchall()
     print(results)
-    db.close
+    db.close()
 
 def print_all_birthday_between():
     db = sqlite3.connect(DATABASE)
@@ -57,15 +66,16 @@ def print_all_birthday_between():
     cursor.execute(sql)
     results = cursor.fetchall()
     print(results)
-    db.close
+    db.close()
 
 
 #main code
+print("welcome to the dating database,in this database you can view all information about each person")
 while True:
     user_input= input(
 """
 What would you like to do.
-1. Print all age
+1. Print all members
 2. Print all male
 3. Print all blogging
 4. Print all age between
@@ -73,7 +83,7 @@ What would you like to do.
 6. Print all birthday between
 """)
     if user_input == "1":
-        print_all_age()
+        print_all_members()
     elif user_input == "2":
         print_all_male()
     elif user_input == "3":
@@ -86,6 +96,7 @@ What would you like to do.
         print_all_birthday_between()
     elif user_input == "7":
         break
+    #add another elif and break
     else:
         print("That was not an option\n")
 
