@@ -11,73 +11,91 @@ def print_all_members():
     '''print all members nicely'''
     db = sqlite3.connect(DATABASE)
     cursor = db.cursor()
-    sql = "SELECT Name,Last_name,Age from members;" 
+    sql = "SELECT Name,Last_name,Age FROM members;" 
     cursor.execute(sql)
     results = cursor.fetchall()
-    print(f"Name  Last_name Age  Gender")
+    print(f"Name        Last_name   Age")
     for members in results:
-        print(f"Name: {members[0]:<12} Last_name: {members[1]:<12} Age: {members[2]:<12}")
+        print(f"{members[0]:<12}{members[1]:<12}{members[2]:<12}")
     db.close()
 
 def print_all_male():
+    '''print all male nicely'''
     db = sqlite3.connect(DATABASE)
     cursor = db.cursor()
     sql = "SELECT * FROM members WHERE Gender = 'Male';"
     cursor.execute(sql)
     results = cursor.fetchall()
-    print(results)
+    print(f"Id          Name        Last_name   Age         Gender      Birthday    Interests   ")
+    for members in results:
+        print(f"{members[0]:<12}{members[1]:<12}{members[2]:<12}{members[3]:<12}{members[4]:<12}{members[5]:<12}{members[6]:<12}")
     db.close()
 
-def print_all_blogging():
+def print_all_interests():
+    '''print all interests nicely'''
     db = sqlite3.connect(DATABASE)
+    #Ask user interests 
+    Interests = input("What is your interests: ")
     cursor = db.cursor()
-    sql = "SELECT Name,Last_name,Interests from members WHERE Interests = 'Blogging';" 
-    cursor.execute(sql)
+    sql = "SELECT Name,Last_name,Interests from members WHERE Interests == ?;" 
+    cursor.execute(sql,(Interests,))
     results = cursor.fetchall()
-    print(results)
+    print(f"Name        Last_name   Interests")
+    for members in results:
+        print(f"{members[0]:<12}{members[1]:<12}{members[2]:<12}")
     db.close()
 
 def print_all_age_between():
+    '''print all age between nicely'''
     db = sqlite3.connect(DATABASE)
     #ask user upper age
     #ask user lower_age
     lower_age = int(input("What is the lowest age?: "))
-    upper_age = int(input("What is the highestage?: "))
+    upper_age = int(input("What is the highest age?: "))
     cursor = db.cursor()
     sql = "SELECT * FROM members WHERE Age BETWEEN ? AND ?;" 
     cursor.execute(sql,(lower_age,upper_age))
     results = cursor.fetchall()
-    print(results)
+    print(f"Id          Name        Last_name   Age         Gender      Birthday    Interests")
+    for members in results:
+        print(f"{members[0]:<12}{members[1]:<12}{members[2]:<12}{members[3]:<12}{members[4]:<12}{members[5]:<12}{members[6]:<12}")
     db.close()
 
 def print_all_birthday():
+    '''print all birthday nicely'''
     db = sqlite3.connect(DATABASE)
     cursor = db.cursor()
     sql = "SELECT * FROM members WHERE Birthday > '1990/01/01';" 
     cursor.execute(sql)
     results = cursor.fetchall()
-    print(results)
+    print(f"Id          Name        Last_name   Age         Gender      Birthday    Interest")
+    for members in results:
+        print(f"{members[0]:<12}{members[1]:<12}{members[2]:<12}{members[3]:<12}{members[4]:<12}{members[5]:<12}{members[6]:<12}")
     db.close()
 
 def print_all_birthday_between():
+    '''print all birthday between nicely'''
     db = sqlite3.connect(DATABASE)
     cursor = db.cursor()
-    sql = "SELECT *FROM members WHERE Birthday BETWEEN '1965/01/01' AND '1999/01/01';" 
+    sql = "SELECT Name,Last_name,Age,Birthday FROM members WHERE Birthday BETWEEN '1965/01/01' AND '1999/01/01';" 
     cursor.execute(sql)
     results = cursor.fetchall()
-    print(results)
+    print(f"Name        Last_name    Age               Birthday")
+    for members in results:
+        print(f"{members[0]:<12}{members[1]:<12} Age: {members[2]:<12} Birthday: {members[3]:<12}")
     db.close()
 
 
 #main code
+
 print("welcome to the dating database,in this database you can view all information about each person")
 while True:
-    user_input= input(
+    user_input = input(
 """
 What would you like to do.
 1. Print all members
 2. Print all male
-3. Print all blogging
+3. Print all interests
 4. Print all age between
 5. Print all birthday
 6. Print all birthday between
@@ -87,7 +105,7 @@ What would you like to do.
     elif user_input == "2":
         print_all_male()
     elif user_input == "3":
-        print_all_blogging
+        print_all_interests()
     elif user_input == "4":
         print_all_age_between()
     elif user_input == "5":
