@@ -11,20 +11,22 @@ def print_all_members():
     '''print all members nicely'''
     db = sqlite3.connect(DATABASE)
     cursor = db.cursor()
-    sql = "SELECT Name,Last_name,Age FROM members;" 
+    sql = "SELECT ID,Name,Last_name,Age FROM members;" 
     cursor.execute(sql)
     results = cursor.fetchall()
-    print(f"Name        Last_name   Age")
+    print(f"ID          Name        Last_name   Age")
     for members in results:
-        print(f"{members[0]:<12}{members[1]:<12}{members[2]:<12}")
+        print(f"{members[0]:<12}{members[1]:<12}{members[2]:<12}{members[3]:<12}")
     db.close()
 
-def print_all_male():
-    '''print all male nicely'''
+def print_all_gender():
+    '''print all gender nicely'''
     db = sqlite3.connect(DATABASE)
+    #Ask user gender type
+    Gender = input("View gender: ")
     cursor = db.cursor()
-    sql = "SELECT * FROM members WHERE Gender = 'Male';"
-    cursor.execute(sql)
+    sql = "SELECT * FROM members WHERE Gender == ?;"
+    cursor.execute(sql,(Gender,))
     results = cursor.fetchall()
     print(f"Id          Name        Last_name   Age         Gender      Birthday    Interests   ")
     for members in results:
@@ -64,9 +66,11 @@ def print_all_age_between():
 def print_all_birthday():
     '''print all birthday nicely'''
     db = sqlite3.connect(DATABASE)
+    #view birthday's less than 
+    Birthday = input("View birthday's greater than: ")
     cursor = db.cursor()
-    sql = "SELECT * FROM members WHERE Birthday > '1990/01/01';" 
-    cursor.execute(sql)
+    sql = "SELECT * FROM members WHERE Birthday > ?;" 
+    cursor.execute(sql,(Birthday,))
     results = cursor.fetchall()
     print(f"Id          Name        Last_name   Age         Gender      Birthday    Interest")
     for members in results:
@@ -76,9 +80,12 @@ def print_all_birthday():
 def print_all_birthday_between():
     '''print all birthday between nicely'''
     db = sqlite3.connect(DATABASE)
+    #View birthday's between
+    Lower_birthday = input("Type in the lower birthday: ")
+    Upper_birthday = input("Type in the upper birthday: ") 
     cursor = db.cursor()
-    sql = "SELECT Name,Last_name,Age,Birthday FROM members WHERE Birthday BETWEEN '1965/01/01' AND '1999/01/01';" 
-    cursor.execute(sql)
+    sql = "SELECT Name,Last_name,Age,Birthday FROM members WHERE Birthday BETWEEN ? AND ?;"
+    cursor.execute(sql,(Lower_birthday,Upper_birthday))
     results = cursor.fetchall()
     print(f"Name        Last_name    Age               Birthday")
     for members in results:
@@ -94,7 +101,7 @@ while True:
 """
 What would you like to do.
 1. Print all members
-2. Print all male
+2. Print all gender
 3. Print all interests
 4. Print all age between
 5. Print all birthday
@@ -103,7 +110,7 @@ What would you like to do.
     if user_input == "1":
         print_all_members()
     elif user_input == "2":
-        print_all_male()
+        print_all_gender()
     elif user_input == "3":
         print_all_interests()
     elif user_input == "4":
